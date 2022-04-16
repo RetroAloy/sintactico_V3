@@ -14,7 +14,7 @@ import java.io.IOException;
 
 /**
  *
- * @author MASH
+ * @author AEVC
  */
 public class Inicio {
     private boolean error = true;
@@ -49,22 +49,26 @@ public class Inicio {
     };
 
     private void factor() {
-        switch(Tokens) {
-        case Sym.ID: siguienteToken(); break;
-        case Sym.NUM: siguienteToken(); break;
-        case Sym.NOT: siguienteToken(); factor(); break;
-        case Sym.PA:
-        	siguienteToken();
-        	expresion();
-        	if(tokens.getLexema() != Sym.PC) {
-        		System.out.println("Invalida linea= " + (tokens.getLinea() + 1));
-                this.error = true;
-        	}else {
-        		siguienteToken();
-        		break;
-        	}
-        	default:errorSintactico();
-        }
+    	//Obtengo el lexema
+    	int token = tokens.getLexema();
+    	//Observo cual token es
+        switch(token) {
+	        //Ejecuto accion segun sea el caso
+	        case Sym.ID: siguienteToken(); break;
+	        case Sym.NUM: siguienteToken(); break;
+	        case Sym.NOT: siguienteToken(); factor(); break;
+	        case Sym.PA:
+	        	siguienteToken();
+	        	expresion();
+	        	if(tokens.getLexema() != Sym.PC) {
+	        		System.out.println("Invalida linea= " + (tokens.getLinea() + 1));
+	                this.error = true;
+	        	}else {
+	        		siguienteToken();
+	        		break;
+	        	}
+	        default:	errorSintactico();
+	   }
     }
 
     private void termino() {
