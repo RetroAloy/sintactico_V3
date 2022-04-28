@@ -18,7 +18,8 @@ import java.io.IOException;
  * @author AEVC
  */
 public class Inicio {
-	private boolean error = true;
+	private boolean error = false;
+	private boolean encontroError = false;
 	private Tokens tokens = null;
 	private Lexico analizador = null;
 
@@ -36,6 +37,7 @@ public class Inicio {
 					
 				} catch (ErrorSintactico e) {
 					System.out.println(e.getMessage());
+					ap.encontroError = false ;
 				}
 			} while (ap.tokens.getLexema() != Sym.EOF);
 
@@ -48,18 +50,23 @@ public class Inicio {
 
 		do {
 			expresion();
-			System.out.println("Línea Correcta " + (tokens.getLinea() + 1));
-			while (tokens.getLexema() != Sym.PUNTOCOMA) {
-				if (this.error && (tokens.getLinea() == 0)) {
-					throw new ErrorSintactico("Expresión inválida: ERROR " + "en última línea");
-				}	
-				if (this.error) {
-					throw new ErrorSintactico("Expresión inválida: ERROR línea " + (tokens.getLinea()));
-				}
-				siguienteToken();
-			}
-			siguienteToken();
 			
+			while (tokens.getLexema() != Sym.PUNTOCOMA) {
+				if (!this.error && (tokens.getLinea() == 0)) {
+					throw new ErrorSintactico("ExpresiÃ³n invÃ¡lida: ERROR " + "en Ãºltima lÃ­nea");
+				}	
+				if (!this.error) {
+					this.encontroError = true;
+					throw new ErrorSintactico("ExpresiÃ³n invÃ¡lida: ERROR lÃ­nea " + (tokens.getLinea() + 1));
+				}
+				
+			}
+			
+			if (!this.error && !this.encontroError) {
+				System.out.println("LÃ­nea Correcta " + (tokens.getLinea() + 1));
+			}
+			
+			siguienteToken();
 		} while (tokens.getLexema() != Sym.EOF);
 	}
 
@@ -86,13 +93,13 @@ public class Inicio {
 			siguienteToken();
 			expresion();
 			if (tokens.getLexema() != Sym.PC) {
-				this.error = true;
+				this.error = false;
 			} else {
 				siguienteToken();
 				break;
 			}
 		default:
-			this.error = true;
+			this.error = false;
 		}
 	}
 
@@ -125,19 +132,7 @@ public class Inicio {
 			exprSimple();
 		}
 	}
-
-	private void errorSintactico() {
-		this.error = false;
-		// descartar todo hasta encontrar ;
-		do {
-			System.out.println(tokens.toString());
-			if (tokens.getLexema() != Sym.PUNTOCOMA) {
-				siguienteToken();
-			}
-		} while (tokens.getLexema() != Sym.PUNTOCOMA && tokens.getLexema() != Sym.EOF);
-
-	}
-
+	
 	private void siguienteToken() {
 		try {
 			tokens = analizador.yylex();

@@ -1,4 +1,4 @@
-num = 2 - 3;
+num = - 2 - 3;
 num = num3 * num4;
 num = num3 / num5;
 num = num + num;
@@ -14,4 +14,10 @@ num = (5 != 5);
 
 num = not num;
 
-num = 10 < 5;
+num = 10;
+
+num = not not not not 10;
+
+num = 10 < 50;
+
+10 = 50;
