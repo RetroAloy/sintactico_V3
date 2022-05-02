@@ -32,28 +32,4 @@ public class Sym {
   public static final int ID = 19;
   public static final int SALTOLINEA = 20;
   public static final int EOF = 21;
-  public static final String[] terminales = new String[] {
-  "PUNTOCOMA",  
-  "AND",
-  "NOT",
-  "OR",
-  "IGUAL",
-  "MAS",
-  "MENOS",
-  "POR",
-  "DIV",
-  "MAYOR",
-  "MENOR",
-  "MAYORI",
-  "MENORI",
-  "PA",
-  "PC",
-  "DIST",
-  "MOD",
-  "NUM",
-  "ID",
-  "DIV_EVENT",
-  "SALTOLINEA",
-  "EOF"
-  };
 }

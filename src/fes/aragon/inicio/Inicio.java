@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package fes.aragon.inicio;
 
 import fes.aragon.codigo.ErrorSintactico;
@@ -19,7 +14,6 @@ import java.io.IOException;
  */
 public class Inicio {
 	private boolean error = false;
-	private boolean encontroError = false;
 	private Tokens tokens = null;
 	private Lexico analizador = null;
 
@@ -37,7 +31,6 @@ public class Inicio {
 					
 				} catch (ErrorSintactico e) {
 					System.out.println(e.getMessage());
-					ap.encontroError = false ;
 				}
 			} while (ap.tokens.getLexema() != Sym.EOF);
 
@@ -52,17 +45,15 @@ public class Inicio {
 			expresion();
 			
 			while (tokens.getLexema() != Sym.PUNTOCOMA) {
-				if (!this.error && (tokens.getLinea() == 0)) {
+				if (tokens.getLinea() == 0) {
 					throw new ErrorSintactico("Expresión inválida: ERROR " + "en última línea");
-				}	
-				if (!this.error) {
-					this.encontroError = true;
-					throw new ErrorSintactico("Expresión inválida: ERROR línea " + (tokens.getLinea() + 1));
 				}
-				
+				this.error = true;
+				siguienteToken();
+				throw new ErrorSintactico("Expresión inválida: ERROR línea " + (tokens.getLinea() + 1));
 			}
 			
-			if (!this.error && !this.encontroError) {
+			if (!this.error) {
 				System.out.println("Línea Correcta " + (tokens.getLinea() + 1));
 			}
 			
@@ -93,13 +84,14 @@ public class Inicio {
 			siguienteToken();
 			expresion();
 			if (tokens.getLexema() != Sym.PC) {
-				this.error = false;
+				this.error = true;
+				throw new ErrorSintactico("Expresión inválida: ERROR parentesis de cierre línea " + (tokens.getLinea() + 1));
 			} else {
 				siguienteToken();
 				break;
 			}
 		default:
-			this.error = false;
+			this.error = true;
 		}
 	}
 
@@ -138,7 +130,7 @@ public class Inicio {
 			tokens = analizador.yylex();
 			if (tokens == null) {
 				tokens = new Tokens("EOF", Sym.EOF, 0, 0);
-				throw new IOException("Fin Archivo");
+				throw new IOException("");
 			}
 		} catch (IOException ex) {
 			System.out.println(ex.getMessage());

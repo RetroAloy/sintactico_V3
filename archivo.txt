@@ -1,23 +1,6 @@
 num = - 2 - 3;
-num = num3 * num4;
-num = num3 / num5;
-num = num + num;
+num = (10 < 50);
+(10 = 50);
+num = (5 != 10);
 
-num = (num + num);
-num = (5*6-10/8);
-
-(5 > 5);
-5 < (5*8/10);
-5 <= 5;
-5 >= 5;
-num = (5 != 5);
-
-num = not num;
-
-num = 10;
-
-num = not not not not 10;
-
-num = 10 < 50;
-
-10 = 50;
+n = not not num;
